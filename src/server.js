@@ -1,14 +1,16 @@
-require('dotenv').config();
-
-const app = require('./app');
-const connectDatabase = require('./config/db');
+import 'dotenv/config';
+import app from './app.js';
+import connectDatabase from './config/db.js';
 
 const PORT = process.env.PORT || 3000;
 
 connectDatabase()
   .then(() => {
     app.listen(PORT, () => {
+      const url = `http://localhost:${PORT}`;
+
       console.log(`Server running on port ${PORT}`);
+      console.log(`Open in browser: ${url}`);
     });
   })
   .catch((error) => {

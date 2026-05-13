@@ -1,8 +1,10 @@
-const router = require('express').Router();
+// 1. Use import instead of require (Add .js extensions!)
+import express from 'express';
+const router = express.Router();
 
-const roomController = require('../controllers/room.controller');
-const auth = require('../middlewares/auth.middleware');
-const rbac = require('../middlewares/rbac.middleware');
+import * as roomController from '../controllers/room.controller.js';
+import auth from '../middlewares/auth.middleware.js';
+import rbac from '../middlewares/rbac.middleware.js';
 
 router.get('/', auth, roomController.getRooms);
 router.get('/:id', auth, roomController.getRoomById);
@@ -10,4 +12,5 @@ router.post('/', auth, rbac('r1'), roomController.createRoom);
 router.patch('/:id', auth, rbac('r1'), roomController.updateRoom);
 router.delete('/:id', auth, rbac('r1'), roomController.deleteRoom);
 
-module.exports = router;
+// 2. Use export default instead of module.exports
+export default router;

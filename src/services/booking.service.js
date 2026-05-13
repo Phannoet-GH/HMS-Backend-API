@@ -1,9 +1,11 @@
-const Booking = require('../models/booking.model');
-const Guest = require('../models/guest.model');
-const Room = require('../models/room.model');
+import Booking from '../models/booking.model.js';
+import Room from '../models/room.model.js';
+import Guest from '../models/guest.model.js';
 
-exports.createBooking = async (data, userId) => {
+export const createBooking = async (data, userId) => {
+
   const room = await Room.findById(data.roomId);
+
   if (!room) {
     const error = new Error('Room not found');
     error.statusCode = 404;
@@ -19,7 +21,11 @@ exports.createBooking = async (data, userId) => {
   const checkInDate = new Date(data.checkInDate);
   const checkOutDate = new Date(data.checkOutDate);
 
-  if (!data.guest || Number.isNaN(checkInDate.getTime()) || Number.isNaN(checkOutDate.getTime())) {
+  if (
+    !data.guest ||
+    Number.isNaN(checkInDate.getTime()) ||
+    Number.isNaN(checkOutDate.getTime())
+  ) {
     const error = new Error('Guest, check-in date, and check-out date are required');
     error.statusCode = 400;
     throw error;
@@ -31,8 +37,12 @@ exports.createBooking = async (data, userId) => {
     throw error;
   }
 
-  const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+  const nights = Math.ceil(
+    (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24)
+  );
+
   const guest = await Guest.create(data.guest);
+
   const booking = await Booking.create({
     guest: guest._id,
     room: room._id,
@@ -46,10 +56,11 @@ exports.createBooking = async (data, userId) => {
   room.status = 'reserved';
   await room.save();
 
-  return Booking.findById(booking._id).populate('guest room createdBy', '-password');
+  return Booking.findById(booking._id)
+    .populate('guest room createdBy', '-password');
 };
 
-exports.getBookings = (filters = {}) => {
+export const getBookings = (filters = {}) => {
   const query = {};
 
   if (filters.status) query.status = filters.status;
@@ -60,17 +71,20 @@ exports.getBookings = (filters = {}) => {
     .sort({ createdAt: -1 });
 };
 
-exports.getBookingById = async (id) => {
-  const booking = await Booking.findById(id).populate('guest room createdBy', '-password');
+export const getBookingById = async (id) => {
+  const booking = await Booking.findById(id)
+    .populate('guest room createdBy', '-password');
+
   if (!booking) {
     const error = new Error('Booking not found');
     error.statusCode = 404;
     throw error;
   }
+
   return booking;
 };
 
-exports.updateBookingStatus = async (id, status) => {
+export const updateBookingStatus = async (id, status) => {
   const booking = await Booking.findByIdAndUpdate(
     id,
     { status },
@@ -84,12 +98,24 @@ exports.updateBookingStatus = async (id, status) => {
   }
 
   if (['checked_out', 'cancelled'].includes(status)) {
-    await Room.findByIdAndUpdate(booking.room._id, { status: 'available' });
+    await Room.findByIdAndUpdate(
+      booking.room._id,
+      { status: 'available' }
+    );
   }
 
   if (status === 'checked_in') {
-    await Room.findByIdAndUpdate(booking.room._id, { status: 'occupied' });
+    await Room.findByIdAndUpdate(
+      booking.room._id,
+      { status: 'occupied' }
+    );
   }
 
   return booking;
+};
+export default {
+  createBooking,
+  getBookings,
+  getBookingById,
+  updateBookingStatus
 };

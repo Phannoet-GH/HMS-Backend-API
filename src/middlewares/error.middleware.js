@@ -1,7 +1,9 @@
-module.exports = (error, req, res, next) => {
+const error = (error, req, res, next) => {
   const statusCode = error.statusCode || 500;
 
   res.status(statusCode).json({
     message: error.message || 'Internal server error'
   });
 };
+
+export default error;

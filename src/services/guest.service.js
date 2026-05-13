@@ -1,10 +1,10 @@
-const Guest = require('../models/guest.model');
+import Guest from '../models/guest.model.js';
 
-exports.createGuest = (data) => {
+export const createGuest = (data) => {
   return Guest.create(data);
 };
 
-exports.getGuests = (filters = {}) => {
+export const getGuests = (filters = {}) => {
   const query = {};
 
   if (filters.search) {
@@ -18,7 +18,7 @@ exports.getGuests = (filters = {}) => {
   return Guest.find(query).sort({ createdAt: -1 });
 };
 
-exports.updateGuest = async (id, data) => {
+export const updateGuest = async (id, data) => {
   const guest = await Guest.findByIdAndUpdate(id, data, {
     new: true,
     runValidators: true
@@ -33,7 +33,7 @@ exports.updateGuest = async (id, data) => {
   return guest;
 };
 
-exports.deleteGuest = async (id) => {
+export const deleteGuest = async (id) => {
   const guest = await Guest.findByIdAndDelete(id);
 
   if (!guest) {
@@ -41,4 +41,10 @@ exports.deleteGuest = async (id) => {
     error.statusCode = 404;
     throw error;
   }
+};
+export default {
+  createGuest,
+  getGuests,
+  updateGuest,
+  deleteGuest
 };

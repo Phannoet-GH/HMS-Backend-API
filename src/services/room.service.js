@@ -1,10 +1,10 @@
-const Room = require('../models/room.model');
+import Room from '../models/room.model.js';
 
-exports.createRoom = (data) => {
+export const createRoom = (data) => {
   return Room.create(data);
 };
 
-exports.getRooms = (filters = {}) => {
+export const getRooms = (filters = {}) => {
   const query = {};
 
   if (filters.status) query.status = filters.status;
@@ -13,7 +13,7 @@ exports.getRooms = (filters = {}) => {
   return Room.find(query).sort({ roomNumber: 1 });
 };
 
-exports.getRoomById = async (id) => {
+export const getRoomById = async (id) => {
   const room = await Room.findById(id);
   if (!room) {
     const error = new Error('Room not found');
@@ -23,7 +23,7 @@ exports.getRoomById = async (id) => {
   return room;
 };
 
-exports.updateRoom = async (id, data) => {
+export const updateRoom = async (id, data) => {
   const room = await Room.findByIdAndUpdate(id, data, {
     new: true,
     runValidators: true
@@ -38,7 +38,7 @@ exports.updateRoom = async (id, data) => {
   return room;
 };
 
-exports.deleteRoom = async (id) => {
+export const deleteRoom = async (id) => {
   const room = await Room.findByIdAndDelete(id);
   if (!room) {
     const error = new Error('Room not found');
@@ -46,3 +46,10 @@ exports.deleteRoom = async (id) => {
     throw error;
   }
 };
+export default {
+  createRoom,
+  getRooms,
+  getRoomById,
+  updateRoom,
+  deleteRoom
+}

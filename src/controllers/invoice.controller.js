@@ -1,8 +1,8 @@
-const Invoice = require('../models/invoice.model');
-const Booking = require('../models/booking.model');
-const response = require('../utils/response');
+import Invoice from '../models/invoice.model.js';
+import Booking from '../models/booking.model.js';
+import response from '../utils/response.js';
 
-exports.createInvoice = async (req, res, next) => {
+export const createInvoice = async (req, res, next) => {
   try {
     const { bookingId, numberOfNights, roomCharges, additionalCharges = [], discount = 0, taxPercentage = 0, notes } = req.body;
 
@@ -63,7 +63,7 @@ exports.createInvoice = async (req, res, next) => {
   }
 };
 
-exports.getInvoices = async (req, res, next) => {
+export const getInvoices = async (req, res, next) => {
   try {
     const { status, bookingId } = req.query;
     const filter = {};
@@ -82,7 +82,7 @@ exports.getInvoices = async (req, res, next) => {
   }
 };
 
-exports.getInvoiceById = async (req, res, next) => {
+export const getInvoiceById = async (req, res, next) => {
   try {
     const invoice = await Invoice.findById(req.params.id)
       .populate('booking')
@@ -98,7 +98,7 @@ exports.getInvoiceById = async (req, res, next) => {
   }
 };
 
-exports.updateInvoiceStatus = async (req, res, next) => {
+export const updateInvoiceStatus = async (req, res, next) => {
   try {
     const { status, paymentDate, paymentMethod } = req.body;
     const updateData = { status };
@@ -118,7 +118,7 @@ exports.updateInvoiceStatus = async (req, res, next) => {
   }
 };
 
-exports.updateInvoice = async (req, res, next) => {
+export const updateInvoice = async (req, res, next) => {
   try {
     const { additionalCharges, discount, taxPercentage, notes } = req.body;
 
@@ -159,7 +159,7 @@ exports.updateInvoice = async (req, res, next) => {
   }
 };
 
-exports.deleteInvoice = async (req, res, next) => {
+export const deleteInvoice = async (req, res, next) => {
   try {
     const invoice = await Invoice.findById(req.params.id);
 

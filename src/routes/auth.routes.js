@@ -1,7 +1,13 @@
-const router = require('express').Router();
-const authController = require('../controllers/auth.controller');
+// 1. Use the default import for Express
+import express from 'express'; 
 
-router.post('/register', authController.register);
-router.post('/login', authController.login);
+// 2. Import your controllers (Ensure .js extension is present)
+import { register, login } from '../controllers/auth.controller.js';
 
-module.exports = router;
+const router = express.Router();
+
+// 3. Define your routes
+router.post('/register', register);
+router.post('/login', login);
+
+export default router;

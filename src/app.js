@@ -1,12 +1,12 @@
-const cors = require('cors');
-const express = require('express');
+import cors from 'cors';
+import express from 'express';
 
-const authRoutes = require('./routes/auth.routes');
-const bookingRoutes = require('./routes/booking.routes');
-const guestRoutes = require('./routes/guest.routes');
-const roomRoutes = require('./routes/room.routes');
-const invoiceRoutes = require('./routes/invoice.routes');
-const errorMiddleware = require('./middlewares/error.middleware');
+import authRoutes from './routes/auth.routes.js';
+import bookingRoutes from './routes/booking.routes.js';
+import guestRoutes from './routes/guest.routes.js';
+import roomRoutes from './routes/room.routes.js';
+import invoiceRoutes from './routes/invoice.routes.js';
+import errorMiddleware from './middlewares/error.middleware.js';
 
 const app = express();
 
@@ -28,4 +28,4 @@ app.use('/api/invoices', invoiceRoutes);
 
 app.use(errorMiddleware);
 
-module.exports = app;
+export default app;

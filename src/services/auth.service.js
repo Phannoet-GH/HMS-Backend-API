@@ -1,9 +1,11 @@
-const User = require('../models/user.model');
-const bcrypt = require('bcryptjs');
-const { generateToken } = require('../utils/jwt');
+// 1. Change 'require' to 'import'
+// Note: Ensure your local model and utils also have .js extensions
+import User from '../models/user.model.js';
+import bcrypt from 'bcryptjs';
+import { generateToken } from '../utils/jwt.js';
 
-// REGISTER
-exports.register = async (data) => {
+// 2. Change 'exports.register' to 'export const register'
+export const register = async (data) => {
   if (!data.username || !data.email || !data.password) {
     const error = new Error('Username, email, and password are required');
     error.statusCode = 400;
@@ -31,8 +33,8 @@ exports.register = async (data) => {
   return { user: sanitizeUser(user), token };
 };
 
-// LOGIN
-exports.login = async (data) => {
+// 3. Change 'exports.login' to 'export const login'
+export const login = async (data) => {
   if (!data.email || !data.password) {
     const error = new Error('Email and password are required');
     error.statusCode = 400;
@@ -58,6 +60,7 @@ exports.login = async (data) => {
   return { user: sanitizeUser(user), token };
 };
 
+// This function remains internal to the file, so no 'export' is needed
 function sanitizeUser(user) {
   const userObject = user.toObject();
   delete userObject.password;

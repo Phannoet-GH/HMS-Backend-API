@@ -1,19 +1,24 @@
-const authService = require('../services/auth.service');
+// 1. Change 'require' to 'import' 
+// CRITICAL: You MUST include the '.js' extension for local files
+import * as authService from '../services/auth.service.js';
 
-exports.register = async (req, res, next) => {
+// 2. Change 'exports.register' to 'export const register'
+export const register = async (req, res) => {
   try {
+    // Note: I'm assuming your service returns the data
     const result = await authService.register(req.body);
     res.status(201).json(result);
   } catch (error) {
-    next(error);
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
-exports.login = async (req, res, next) => {
+// 3. Change 'exports.login' to 'export const login'
+export const login = async (req, res) => {
   try {
     const result = await authService.login(req.body);
-    res.json(result);
+    res.status(200).json(result);
   } catch (error) {
-    next(error);
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };

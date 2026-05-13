@@ -1,11 +1,20 @@
-exports.created = (res, data, message = 'Created successfully') => {
-  return res.status(201).json({ message, data });
+const ok = (res, data, message = 'Success') => {
+  res.status(200).json({
+    success: true,
+    message,
+    data
+  });
 };
 
-exports.ok = (res, data, message = 'Success') => {
-  return res.status(200).json({ message, data });
+const created = (res, data, message = 'Created') => {
+  res.status(201).json({
+    success: true,
+    message,
+    data
+  });
 };
 
-exports.noContent = (res) => {
-  return res.status(204).send();
+export default {
+  ok,
+  created
 };

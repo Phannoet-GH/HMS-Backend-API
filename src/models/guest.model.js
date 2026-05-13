@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const guestSchema = new mongoose.Schema({
   fullName: {
@@ -25,5 +25,4 @@ const guestSchema = new mongoose.Schema({
     trim: true
   }
 }, { timestamps: true });
-
-module.exports = mongoose.model('Guest', guestSchema);
+export default mongoose.model('Guest', guestSchema);

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const invoiceSchema = new mongoose.Schema({
   invoiceNumber: {
@@ -95,5 +95,4 @@ invoiceSchema.pre('save', async function (next) {
   }
   next();
 });
-
-module.exports = mongoose.model('Invoice', invoiceSchema);
+export default mongoose.model('Invoice', invoiceSchema);

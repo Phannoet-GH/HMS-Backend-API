@@ -1,7 +1,7 @@
-const roomService = require('../services/room.service');
-const response = require('../utils/response');
+import roomService from '../services/room.service.js';
+import response from '../utils/response.js';
 
-exports.createRoom = async (req, res, next) => {
+export const createRoom = async (req, res, next) => {
   try {
     const room = await roomService.createRoom(req.body);
     response.created(res, room, 'Room created successfully');
@@ -10,7 +10,7 @@ exports.createRoom = async (req, res, next) => {
   }
 };
 
-exports.getRooms = async (req, res, next) => {
+export const getRooms = async (req, res, next) => {
   try {
     const rooms = await roomService.getRooms(req.query);
     response.ok(res, rooms);
@@ -19,7 +19,7 @@ exports.getRooms = async (req, res, next) => {
   }
 };
 
-exports.getRoomById = async (req, res, next) => {
+export const getRoomById = async (req, res, next) => {
   try {
     const room = await roomService.getRoomById(req.params.id);
     response.ok(res, room);
@@ -28,7 +28,7 @@ exports.getRoomById = async (req, res, next) => {
   }
 };
 
-exports.updateRoom = async (req, res, next) => {
+export const updateRoom = async (req, res, next) => {
   try {
     const room = await roomService.updateRoom(req.params.id, req.body);
     response.ok(res, room, 'Room updated successfully');
@@ -37,7 +37,7 @@ exports.updateRoom = async (req, res, next) => {
   }
 };
 
-exports.deleteRoom = async (req, res, next) => {
+export const deleteRoom = async (req, res, next) => {
   try {
     await roomService.deleteRoom(req.params.id);
     response.noContent(res);

@@ -1,4 +1,4 @@
-module.exports = function (...allowedRoles) {
+const rbac = function (...allowedRoles) {
   return (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -13,3 +13,5 @@ module.exports = function (...allowedRoles) {
     next();
   };
 };
+
+export default rbac;
