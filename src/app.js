@@ -7,6 +7,7 @@ import guestRoutes from './routes/guest.routes.js';
 import roomRoutes from './routes/room.routes.js';
 import invoiceRoutes from './routes/invoice.routes.js';
 import errorMiddleware from './middlewares/error.middleware.js';
+import dashboardRoutes from './routes/dashboard.routes.js';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/guests', guestRoutes);
 app.use('/api/rooms', roomRoutes);

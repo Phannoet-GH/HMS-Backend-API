@@ -53,7 +53,7 @@ export const createBooking = async (data, userId) => {
     createdBy: userId
   });
 
-  room.status = 'reserved';
+  room.status = booking.status === 'checked_in' ? 'occupied' : 'reserved';
   await room.save();
 
   return Booking.findById(booking._id)

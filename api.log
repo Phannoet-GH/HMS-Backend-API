@@ -2,6 +2,6 @@
 > backend@1.0.0 start
 > node src/server.js
 
-◇ injected env (3) from .env // tip: ⌘ override existing { override: true }
-MongoDB connected
+MongoDB Connected
 Server running on port 3000
+Open in browser: http://localhost:3000
