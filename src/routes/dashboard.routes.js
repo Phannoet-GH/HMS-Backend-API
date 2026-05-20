@@ -1,8 +1,14 @@
 import express from 'express';
 import Room from '../models/room.model.js';
 import Booking from '../models/booking.model.js';
+import auth from '../middlewares/auth.middleware.js';
+import rbac from '../middlewares/rbac.middleware.js';
 
 const router = express.Router();
+
+// All dashboard routes require authentication
+router.use(auth);
+router.use(rbac('r1')); // Only admin can access dashboard
 
 router.get('/stats', async (req, res) => {
   try {

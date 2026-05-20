@@ -18,6 +18,18 @@ export const getGuests = (filters = {}) => {
   return Guest.find(query).sort({ createdAt: -1 });
 };
 
+export const getGuestById = async (id) => {
+  const guest = await Guest.findById(id);
+
+  if (!guest) {
+    const error = new Error('Guest not found');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  return guest;
+};
+
 export const updateGuest = async (id, data) => {
   const guest = await Guest.findByIdAndUpdate(id, data, {
     new: true,
@@ -45,6 +57,7 @@ export const deleteGuest = async (id) => {
 export default {
   createGuest,
   getGuests,
+  getGuestById,
   updateGuest,
   deleteGuest
 };

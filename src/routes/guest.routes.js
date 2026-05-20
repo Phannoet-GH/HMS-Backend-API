@@ -8,6 +8,7 @@ import rbac from '../middlewares/rbac.middleware.js';
 
 router.get('/', auth, rbac('r1', 'r2'), guestController.getGuests);
 router.post('/', auth, rbac('r1', 'r2'), guestController.createGuest);
+router.get('/:id', auth, rbac('r1', 'r2'), guestController.getGuestById);
 router.patch('/:id', auth, rbac('r1', 'r2'), guestController.updateGuest);
 router.delete('/:id', auth, rbac('r1'), guestController.deleteGuest);
 

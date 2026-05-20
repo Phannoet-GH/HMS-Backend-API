@@ -19,6 +19,15 @@ export const getGuests = async (req, res, next) => {
   }
 };
 
+export const getGuestById = async (req, res, next) => {
+  try {
+    const guest = await guestService.getGuestById(req.params.id);
+    response.ok(res, guest);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const updateGuest = async (req, res, next) => {
   try {
     const guest = await guestService.updateGuest(req.params.id, req.body);
