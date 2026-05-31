@@ -56,3 +56,30 @@ export const updateBookingStatus = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateBooking = async (req, res, next) => {
+  try {
+    const booking = await bookingService.updateBooking(
+      req.params.id,
+      req.body
+    );
+
+    response.ok(
+      res,
+      booking,
+      'Booking updated successfully'
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteBooking = async (req, res, next) => {
+  try {
+    await bookingService.deleteBooking(req.params.id);
+
+    response.ok(res, null, 'Booking deleted successfully');
+  } catch (error) {
+    next(error);
+  }
+};

@@ -1,0 +1,7 @@
+
+> backend@1.0.0 start
+> node src/server.js
+
+MongoDB Connected
+Server running on port 3000
+Open in browser: http://localhost:3000

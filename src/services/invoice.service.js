@@ -11,6 +11,12 @@ export const createInvoice = async (data, userId) => {
     throw error;
   }
 
+  if (!booking.guest || !booking.room) {
+    const error = new Error('Booking is missing guest or room data');
+    error.statusCode = 409;
+    throw error;
+  }
+
   let subtotal = roomCharges;
   let additionalTotal = 0;
 
@@ -91,7 +97,7 @@ export const getInvoiceById = async (id) => {
   return invoice;
 };
 
-export const updateInvoiceStatus = async (id, status) => {
+export const updateInvoiceStatus = async (id, status, data = {}) => {
   const validStatuses = ['draft', 'issued', 'unpaid', 'paid', 'cancelled', 'void'];
 
   if (!validStatuses.includes(status)) {
@@ -104,7 +110,8 @@ export const updateInvoiceStatus = async (id, status) => {
     id,
     { 
       status,
-      ...(status === 'paid' && { paymentDate: new Date() })
+      ...(status === 'paid' && { paymentDate: data.paymentDate ? new Date(data.paymentDate) : new Date() }),
+      ...(data.paymentMethod && { paymentMethod: data.paymentMethod })
     },
     { new: true, runValidators: true }
   ).populate('booking').populate('createdBy', 'username email');

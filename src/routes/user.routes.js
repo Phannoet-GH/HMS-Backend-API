@@ -5,10 +5,8 @@ import * as userController from '../controllers/user.controller.js';
 import auth from '../middlewares/auth.middleware.js';
 import rbac from '../middlewares/rbac.middleware.js';
 
-// Public routes
-router.post('/', rbac('r1'), userController.createUser);
-
 // Protected routes
+router.post('/', auth, rbac('r1'), userController.createUser);
 router.get('/current', auth, userController.getCurrentUser);
 router.get('/', auth, rbac('r1'), userController.getUsers);
 router.get('/:id', auth, rbac('r1'), userController.getUserById);

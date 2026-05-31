@@ -51,7 +51,8 @@ export const updateInvoiceStatus = async (req, res, next) => {
 
     const invoice = await invoiceService.updateInvoiceStatus(
       req.params.id,
-      status
+      status,
+      req.body
     );
 
     response.ok(res, invoice, 'Invoice status updated successfully');
