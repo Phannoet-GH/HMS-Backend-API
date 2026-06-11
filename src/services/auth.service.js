@@ -6,26 +6,37 @@ import { generateToken } from '../utils/jwt.js';
 
 // 2. Change 'exports.register' to 'export const register'
 export const register = async (data) => {
-  if (!data.username || !data.email || !data.password) {
+  const username = data.username?.trim();
+  const email = data.email?.trim().toLowerCase();
+  const password = data.password;
+  const roleId = data.roleId || "r3";
+
+  if (!username || !email || !password) {
     const error = new Error('Username, email, and password are required');
     error.statusCode = 400;
     throw error;
   }
 
-  const existingUser = await User.findOne({ email: data.email });
+  if (password.length < 6) {
+    const error = new Error('Password must be at least 6 characters');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const existingUser = await User.findOne({ email });
   if (existingUser) {
     const error = new Error('Email is already registered');
     error.statusCode = 409;
     throw error;
   }
 
-  const hashed = await bcrypt.hash(data.password, 10);
+  const hashed = await bcrypt.hash(password, 10);
 
   const user = await User.create({
-    username: data.username,
-    email: data.email,
+    username,
+    email,
     password: hashed,
-    roleId: data.roleId || "r3"
+    roleId
   });
 
   const token = generateToken(user);
