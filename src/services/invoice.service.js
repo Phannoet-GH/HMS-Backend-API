@@ -61,7 +61,10 @@ export const createInvoice = async (data, userId) => {
   });
 
   await invoice.save();
-  return invoice.populate('booking').populate('createdBy', '-password');
+  return invoice.populate([
+    { path: 'booking' },
+    { path: 'createdBy', select: '-password' }
+  ]);
 };
 
 export const getInvoices = async (filters = {}) => {

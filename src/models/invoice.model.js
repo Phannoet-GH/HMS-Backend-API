@@ -1,5 +1,19 @@
 import mongoose from 'mongoose';
 
+const invoiceGuestSchema = new mongoose.Schema({
+  fullName: String,
+  email: String,
+  phone: String,
+  address: String,
+  idNumber: String
+}, { _id: false });
+
+const invoiceRoomSchema = new mongoose.Schema({
+  roomNumber: String,
+  type: String,
+  pricePerNight: Number
+}, { _id: false });
+
 const invoiceSchema = new mongoose.Schema({
   invoiceNumber: {
     type: String,
@@ -11,18 +25,8 @@ const invoiceSchema = new mongoose.Schema({
     ref: 'Booking',
     required: true
   },
-  guest: {
-    fullName: String,
-    email: String,
-    phone: String,
-    address: String,
-    idNumber: String
-  },
-  room: {
-    roomNumber: String,
-    type: String,
-    pricePerNight: Number
-  },
+  guest: invoiceGuestSchema,
+  room: invoiceRoomSchema,
   checkInDate: Date,
   checkOutDate: Date,
   numberOfNights: {
@@ -85,7 +89,7 @@ const invoiceSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Auto-generate invoice number
-invoiceSchema.pre('save', async function (next) {
+invoiceSchema.pre('save', async function () {
   if (!this.invoiceNumber) {
     const count = await this.constructor.countDocuments();
     const date = new Date();
@@ -93,6 +97,5 @@ invoiceSchema.pre('save', async function (next) {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     this.invoiceNumber = `INV-${year}${month}-${String(count + 1).padStart(5, '0')}`;
   }
-  next();
 });
 export default mongoose.model('Invoice', invoiceSchema);

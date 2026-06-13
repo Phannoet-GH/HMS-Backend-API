@@ -12,7 +12,7 @@ const router = express.Router();
 router.use(authMiddleware);
 
 // Create a new invoice
-router.post('/', rbac('r1', 'r5'), invoiceController.createInvoice);
+router.post('/', rbac('r1', 'r4', 'r5'), invoiceController.createInvoice);
 
 // Get all invoices
 router.get('/', rbac('r1', 'r4', 'r5'), invoiceController.getInvoices);
@@ -21,10 +21,10 @@ router.get('/', rbac('r1', 'r4', 'r5'), invoiceController.getInvoices);
 router.get('/:id', rbac('r1', 'r4', 'r5'), invoiceController.getInvoiceById);
 
 // Update invoice status
-router.patch('/:id/status', rbac('r1', 'r5'), invoiceController.updateInvoiceStatus);
+router.patch('/:id/status', rbac('r1', 'r4', 'r5'), invoiceController.updateInvoiceStatus);
 
 // Update invoice details
-router.put('/:id', rbac('r1', 'r5'), invoiceController.updateInvoice);
+router.put('/:id', rbac('r1', 'r4', 'r5'), invoiceController.updateInvoice);
 
 // Delete invoice
 router.delete('/:id', rbac('r1', 'r5'), invoiceController.deleteInvoice);
