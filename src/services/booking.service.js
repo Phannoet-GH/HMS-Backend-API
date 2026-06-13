@@ -18,9 +18,18 @@ const getRoomStatusForBookingStatus = (status) => {
 
 const syncRoomStatus = async (roomId, status) => {
   if (!roomId) return;
-  await Room.findByIdAndUpdate(roomId, {
-    status: getRoomStatusForBookingStatus(status)
-  });
+
+  const room = await Room.findByIdAndUpdate(
+    roomId,
+    { status: getRoomStatusForBookingStatus(status) },
+    { new: true, runValidators: true }
+  );
+
+  if (!room) {
+    throw createError('Room not found while syncing room status', 404);
+  }
+
+  return room;
 };
 
 const calculateNights = (checkInDate, checkOutDate) => {

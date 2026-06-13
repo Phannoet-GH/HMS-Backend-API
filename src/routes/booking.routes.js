@@ -9,11 +9,13 @@ import * as bookingController from '../controllers/booking.controller.js';
 import auth from '../middlewares/auth.middleware.js';
 import rbac from '../middlewares/rbac.middleware.js';
 
-router.get('/', auth, rbac('r1', 'r2', 'r4'), bookingController.getBookings);
-router.get('/:id', auth, rbac('r1', 'r2', 'r4'), bookingController.getBookingById);
-router.post('/', auth, rbac('r1', 'r2'), bookingController.createBooking);
-router.patch('/:id', auth, rbac('r1', 'r2'), bookingController.updateBooking);
-router.patch('/:id/status', auth, rbac('r1', 'r2'), bookingController.updateBookingStatus);
+const bookingStaffRoles = ['r1', 'r2', 'r4'];
+
+router.get('/', auth, rbac(...bookingStaffRoles), bookingController.getBookings);
+router.get('/:id', auth, rbac(...bookingStaffRoles), bookingController.getBookingById);
+router.post('/', auth, rbac(...bookingStaffRoles), bookingController.createBooking);
+router.patch('/:id', auth, rbac(...bookingStaffRoles), bookingController.updateBooking);
+router.patch('/:id/status', auth, rbac(...bookingStaffRoles), bookingController.updateBookingStatus);
 router.delete('/:id', auth, rbac('r1', 'r2'), bookingController.deleteBooking);
 
 // Change this:
