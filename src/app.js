@@ -10,6 +10,7 @@ import userRoutes from './routes/user.routes.js';
 import errorMiddleware from './middlewares/error.middleware.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import { registerOperationsRoutes } from './routes/operations.routes.js';
+import checkinRoutes from './routes/checkin.routes.js';
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/guests', guestRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/invoices', invoiceRoutes);
+app.use('/api/checkins', checkinRoutes);
 registerOperationsRoutes(app);
 
 app.use(errorMiddleware);
