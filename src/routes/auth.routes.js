@@ -1,13 +1,11 @@
-// 1. Use the default import for Express
-import express from 'express'; 
-
-// 2. Import your controllers (Ensure .js extension is present)
-import { register, login } from '../controllers/auth.controller.js';
+import express from 'express';
+import { registerUser, loginUser, logoutUser } from '../controllers/auth.controller.js';
+import auth from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-// 3. Define your routes
-router.post('/register', register);
-router.post('/login', login);
+router.post('/register', registerUser);
+router.post('/login', loginUser);
+router.post('/logout', auth, logoutUser); // Needs auth middleware to read req.user
 
 export default router;

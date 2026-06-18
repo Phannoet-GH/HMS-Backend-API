@@ -1,33 +1,25 @@
-// 1. Swap 'require' for 'import'
 import express from 'express';
-// 2. IMPORTANT: You must include the '.js' extension in ESM
-import * as invoiceController from '../controllers/invoice.controller.js';
-import authMiddleware from '../middlewares/auth.middleware.js';
-import rbac from '../middlewares/rbac.middleware.js';
-
 const router = express.Router();
 
-// All routes require authentication
-// Note: Ensure authMiddleware.js uses 'export default' for this syntax
-router.use(authMiddleware);
+import * as invoiceController from '../controllers/invoice.controller.js';
+import auth from '../middlewares/auth.middleware.js';
+import rbac from '../middlewares/rbac.middleware.js';
 
-// Create a new invoice
-router.post('/', rbac('r1', 'r4', 'r5'), invoiceController.createInvoice);
+// 📋 Staff roles allowed to interact with invoicing (r1: Admin, r2: Manager, r4: Front Desk)
+const authorizedFinanceStaff = ['r1', 'r2', 'r4', 'r5'];
 
-// Get all invoices
-router.get('/', rbac('r1', 'r4', 'r5'), invoiceController.getInvoices);
+router.route('/')
+    .get(auth, rbac(...authorizedFinanceStaff), invoiceController.getInvoices)
+    .post(auth, rbac(...authorizedFinanceStaff), invoiceController.createInvoice);
 
-// Get invoice by ID
-router.get('/:id', rbac('r1', 'r4', 'r5'), invoiceController.getInvoiceById);
+router.route('/:id')
+    .get(auth, rbac(...authorizedFinanceStaff), invoiceController.getInvoiceById)
+    .patch(auth, rbac(...authorizedFinanceStaff), invoiceController.updateInvoice);
 
-// Update invoice status
-router.patch('/:id/status', rbac('r1', 'r4', 'r5'), invoiceController.updateInvoiceStatus);
+// 🎯 Specialized Payment Processing Endpoint
+router.put('/:id/status', auth, rbac(...authorizedFinanceStaff), invoiceController.updateInvoiceStatus);
 
-// Update invoice details
-router.put('/:id', rbac('r1', 'r4', 'r5'), invoiceController.updateInvoice);
+// ❌ Strict Destructive Action: Only highest administrative tiers can drop a bill record
+router.delete('/:id', auth, rbac('r1', 'r2'), invoiceController.deleteInvoice);
 
-// Delete invoice
-router.delete('/:id', rbac('r1', 'r5'), invoiceController.deleteInvoice);
-
-// 3. Swap 'module.exports' for 'export default'
 export default router;

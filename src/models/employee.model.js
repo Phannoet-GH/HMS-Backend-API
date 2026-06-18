@@ -6,25 +6,30 @@ const employeeSchema = new mongoose.Schema({
         required: [true, 'Full name is required'],
         trim: true
     },
-    department: {
-        type: String,
-        required: [true, 'Department is required'],
-        enum: ['Housekeeping', 'Front Desk', 'Food & Beverage', 'Maintenance', 'Security', 'Management'],
-        trim: true
+    departmentId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Department',
+        required: [true, 'Department is required']
     },
-    role: {
+    position: {
         type: String,
-        required: [true, 'Role is required'],
-        trim: true
+        trim: true,
+        default: ''
+    },
+    managerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Employee',
+        default: null
     },
     shift: {
         type: String,
         enum: ['morning', 'afternoon', 'evening', 'night'],
-        required: [true, 'Shift is required']
+        default: 'morning'
     },
     phone: {
         type: String,
-        trim: true
+        trim: true,
+        default: ''
     },
     status: {
         type: String,
@@ -34,7 +39,7 @@ const employeeSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 employeeSchema.index({ status: 1 });
-employeeSchema.index({ department: 1 });
-employeeSchema.index({ shift: 1 });
-
-export default mongoose.model('Employee', employeeSchema);
+employeeSchema.index({ departmentId: 1 });
+employeeSchema.index({ managerId: 1 });
+const Employee = mongoose.models.Employee || mongoose.model('Employee', employeeSchema);
+export default Employee;

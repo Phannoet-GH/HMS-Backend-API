@@ -1,10 +1,17 @@
-import jwt from 'jsonwebtoken'; // 1. Use import
+import jwt from 'jsonwebtoken';
 
-// 2. Add 'export' directly before the constant
 export const generateToken = (user) => {
+    const secret = process.env.JWT_SECRET || 'YOUR_BACKUP_DEVELOPMENT_SECRET';
+
+    // 🪙 Flattening the payload structure so it reads beautifully inside your middlewares
     return jwt.sign(
-        { id: user._id, roleId: user.roleId }, 
-        process.env.JWT_SECRET, 
-        { expiresIn: '1d' }
+        {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            roleId: user.roleId // 🎯 Embedded here!
+        },
+        secret,
+        { expiresIn: '8h' } // Standard operational shift window length
     );
 };

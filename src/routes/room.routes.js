@@ -1,4 +1,3 @@
-// 1. Use import instead of require (Add .js extensions!)
 import express from 'express';
 const router = express.Router();
 
@@ -6,13 +5,19 @@ import * as roomController from '../controllers/room.controller.js';
 import auth from '../middlewares/auth.middleware.js';
 import rbac from '../middlewares/rbac.middleware.js';
 
-const roomManagerRoles = ['r1', 'r2'];
+// 📋 Roles authorized to view/interact with rooms (r1: Admin, r2: Manager, r4: Front Desk / Housekeeping)
+const authorizedRoomStaff = ['r1', 'r2', 'r3', 'r4'];
 
-router.get('/', auth, roomController.getRooms);
-router.get('/:id', auth, roomController.getRoomById);
-router.post('/', auth, rbac(...roomManagerRoles), roomController.createRoom);
-router.put('/:id', auth, rbac(...roomManagerRoles), roomController.updateRoom);
-router.delete('/:id', auth, rbac(...roomManagerRoles), roomController.deleteRoom);
+router.route('/')
+    .get(auth, rbac(...authorizedRoomStaff), roomController.getRooms)
+    // 🔒 Creating units is restricted to higher management levels
+    .post(auth, rbac('r1', 'r2'), roomController.createRoom);
 
-// 2. Use export default instead of module.exports
+router.route('/:id')
+    .get(auth, rbac(...authorizedRoomStaff), roomController.getRoomById)
+    .put(auth, rbac(...authorizedRoomStaff), roomController.updateRoom)
+    .patch(auth, rbac(...authorizedRoomStaff), roomController.updateRoom)
+    // ❌ Dropping physical inventory is restricted strictly to Admins and Managers
+    .delete(auth, rbac('r1', 'r2'), roomController.deleteRoom);
+
 export default router;

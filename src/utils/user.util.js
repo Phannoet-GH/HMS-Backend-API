@@ -9,9 +9,9 @@ export const sanitizeUser = (user) => {
     // If it's a Mongoose document, convert it to a plain JavaScript object
     const userObj = user.toObject ? user.toObject() : { ...user };
 
-    // Delete sensitive fields
+    // Delete sensitive fields completely
     delete userObj.password;
-    delete userObj.__v; // Optional: removes Mongoose version key
+    delete userObj.__v;
 
     return userObj;
 };

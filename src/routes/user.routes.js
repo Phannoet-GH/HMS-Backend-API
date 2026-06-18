@@ -5,13 +5,22 @@ import * as userController from '../controllers/user.controller.js';
 import auth from '../middlewares/auth.middleware.js';
 import rbac from '../middlewares/rbac.middleware.js';
 
-// Protected routes
-router.post('/', auth, rbac('r1'), userController.createUser);
+// 📋 Global User Access: Reading your own token profile data
+router.get('/me', auth, userController.getCurrentUser);
 router.get('/current', auth, userController.getCurrentUser);
-router.get('/', auth, rbac('r1'), userController.getUsers);
-router.get('/:id', auth, rbac('r1'), userController.getUserById);
-router.patch('/:id', auth, rbac('r1'), userController.updateUser);
-router.patch('/:id/password', auth, userController.updateUserPassword);
-router.delete('/:id', auth, rbac('r1'), userController.deleteUser);
+
+// 🔒 Administrative Infrastructure Controls: restricted solely to High Admin ('r1')
+router.use(auth, rbac('r1'));
+
+router.route('/')
+    .get(userController.getUsers)
+    .post(userController.createUser);
+
+router.route('/:id')
+    .get(userController.getUserById)
+    .put(userController.updateUser)
+    .delete(userController.deleteUser); // Triggers the soft-disable handler safely
+
+router.patch('/:id/password', userController.updateUserPassword);
 
 export default router;

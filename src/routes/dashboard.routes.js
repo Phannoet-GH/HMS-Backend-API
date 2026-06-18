@@ -89,22 +89,25 @@ router.get('/stats', async (req, res) => {
 });
 
 router.get('/room-status', async (req, res) => {
-
-  const rooms = await Room.find()
-    .limit(6);
-
-  res.json(rooms);
+  try {
+    const rooms = await Room.find().limit(6);
+    res.json(rooms);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 router.get('/recent-bookings', async (req, res) => {
-
-  const bookings = await Booking.find()
-    .populate('guest')
-    .populate('room')
-    .sort({ createdAt: -1 })
-    .limit(5);
-
-  res.json(bookings);
+  try {
+    const bookings = await Booking.find()
+      .populate('guestId')
+      .populate('roomId')
+      .sort({ createdAt: -1 })
+      .limit(5);
+    res.json(bookings);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 export default router;
