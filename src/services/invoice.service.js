@@ -29,6 +29,9 @@ export const createInvoice = async (data, userId) => {
     throw error;
   }
 
+  const guestObjectId = booking.populated('guestId') || booking.guestId._id || booking.guestId;
+  const roomObjectId = booking.populated('roomId') || booking.roomId._id || booking.roomId;
+
   let subtotal = roomCharges;
   let additionalTotal = 0;
 
@@ -47,6 +50,7 @@ export const createInvoice = async (data, userId) => {
     booking: bookingId,
     // Creating an isolated snapshot of the guest profile data at check-out time
     guest: {
+      guestId: guestObjectId,
       fullName: booking.guestId.fullName,
       email: booking.guestId.email,
       phone: booking.guestId.phone,
@@ -54,6 +58,7 @@ export const createInvoice = async (data, userId) => {
     },
     // Creating an isolated snapshot of the room parameters at check-out time
     room: {
+      roomId: roomObjectId,
       roomNumber: booking.roomId.roomNumber,
       type: booking.roomId.type,
       pricePerNight: booking.roomId.pricePerNight

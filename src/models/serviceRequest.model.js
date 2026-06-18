@@ -13,6 +13,11 @@ const serviceRequestSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    guestName: {
+        type: String,
+        trim: true,
+        default: ''
+    },
     // 🧹 Clean Category Enum: Standardized list of hotel service tasks
     type: {
         type: String,

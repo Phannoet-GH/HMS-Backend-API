@@ -34,7 +34,7 @@ router.get('/stats', async (req, res) => {
     const totalBookings = await Booking.countDocuments();
 
     const activeBookings = await Booking.countDocuments({
-      status: { $in: ['confirmed', 'checked_in'] }
+      status: { $in: ['confirmed', 'checked-in'] }
     });
 
     const totalRevenueData = await Booking.aggregate([

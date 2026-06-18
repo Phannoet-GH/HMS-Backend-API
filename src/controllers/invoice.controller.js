@@ -38,7 +38,7 @@ export const getInvoiceById = async (req, res, next) => {
 // 💳 UPDATE STATUS (Processes payments like cash, card, or QR-code)
 export const updateInvoiceStatus = async (req, res, next) => {
   try {
-    const { status, paymentMethod, transactionRef } = req.body;
+    const { status, paymentMethod, paymentDate, transactionRef } = req.body;
 
     if (!status) {
       // Clean, immediate validation interception using your standard response layer
@@ -48,6 +48,7 @@ export const updateInvoiceStatus = async (req, res, next) => {
     // Explicitly package transaction parameters to clean up your service layer inputs
     const statusPayload = {
       paymentMethod: paymentMethod || 'cash',
+      paymentDate,
       transactionRef: transactionRef || ''
     };
 

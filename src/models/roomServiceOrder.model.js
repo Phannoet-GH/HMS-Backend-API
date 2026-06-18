@@ -85,5 +85,5 @@ roomServiceSchema.index({ status: 1 });
 roomServiceSchema.index({ "items.inventoryItemId": 1 });
 
 // 🟢 FIXED: Keeps the compiled model intact inside Mongoose's internal registry across watches
-const RoomServiceOrder = mongoose.models.RoomServiceOrder || mongoose.model('RoomServiceOrder', roomServiceOrderSchema);
+const RoomServiceOrder = mongoose.models.RoomServiceOrder || mongoose.model('RoomServiceOrder', roomServiceSchema);
 export default RoomServiceOrder;

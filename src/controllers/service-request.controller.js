@@ -3,7 +3,6 @@ import response from '../utils/response.js';
 
 export const createServiceRequest = async (req, res, next) => {
     try {
-        console.log('MODEL SCHEMA KEYS:', Object.keys(ServiceRequest.schema.obj));
         const request = await ServiceRequest.create(req.body);
         response.created(res, request, 'Service request registered successfully');
     } catch (error) {

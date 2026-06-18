@@ -1,6 +1,22 @@
 import { InventoryItem } from '../models/operations.model.js';
 
-export const createItem = async (data) => await InventoryItem.create(data);
+const normalizeItem = (data = {}) => {
+    const quantity = Number(data.quantity ?? 0);
+    const reorderLevel = Number(data.reorderLevel ?? 5);
+    const status = quantity === 0 ? 'out-of-stock' : quantity <= reorderLevel ? 'low-stock' : 'in-stock';
+
+    return {
+        ...data,
+        sku: data.sku?.trim() || undefined,
+        supplier: data.supplier?.trim() || '',
+        quantity,
+        reorderLevel,
+        unitCost: Number(data.unitCost ?? 0),
+        status
+    };
+};
+
+export const createItem = async (data) => await InventoryItem.create(normalizeItem(data));
 
 export const getAllItems = async (filters = {}) => {
     const query = {};
@@ -20,7 +36,7 @@ export const getItemById = async (id) => {
 };
 
 export const updateItem = async (id, data) => {
-    const item = await InventoryItem.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+    const item = await InventoryItem.findByIdAndUpdate(id, normalizeItem(data), { new: true, runValidators: true });
     if (!item) {
         const error = new Error('Inventory record file entry not located');
         error.statusCode = 404;
